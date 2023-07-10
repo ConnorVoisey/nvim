@@ -6,5 +6,5 @@ The leader key is bound to space.
 
 ### files
 
-File tree: <leader>tf
-Find files by string: <leader>pf
+File tree: `<leader>`tf
+Find files by string: `<leader>`pf
