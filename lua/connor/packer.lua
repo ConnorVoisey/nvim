@@ -47,7 +47,6 @@ return require('packer').startup(function(use)
 
     use("folke/zen-mode.nvim")
     use("eandrju/cellular-automaton.nvim")
-    use("laytan/cloak.nvim")
     use {
         'nvim-tree/nvim-tree.lua',
         requires = {
@@ -61,4 +60,6 @@ return require('packer').startup(function(use)
             require("inc_rename").setup()
         end,
     }
+    use("ap/vim-css-color")
+    use { "christoomey/vim-tmux-navigator", lazy = true }
 end)

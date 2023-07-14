@@ -84,11 +84,6 @@ _G.packer_plugins = {
     path = "/home/connor/.local/share/nvim/site/pack/packer/start/cellular-automaton.nvim",
     url = "https://github.com/eandrju/cellular-automaton.nvim"
   },
-  ["cloak.nvim"] = {
-    loaded = true,
-    path = "/home/connor/.local/share/nvim/site/pack/packer/start/cloak.nvim",
-    url = "https://github.com/laytan/cloak.nvim"
-  },
   ["cmp-buffer"] = {
     loaded = true,
     path = "/home/connor/.local/share/nvim/site/pack/packer/start/cmp-buffer",
@@ -210,10 +205,20 @@ _G.packer_plugins = {
     path = "/home/connor/.local/share/nvim/site/pack/packer/start/undotree",
     url = "https://github.com/mbbill/undotree"
   },
+  ["vim-css-color"] = {
+    loaded = true,
+    path = "/home/connor/.local/share/nvim/site/pack/packer/start/vim-css-color",
+    url = "https://github.com/ap/vim-css-color"
+  },
   ["vim-fugitive"] = {
     loaded = true,
     path = "/home/connor/.local/share/nvim/site/pack/packer/start/vim-fugitive",
     url = "https://github.com/tpope/vim-fugitive"
+  },
+  ["vim-tmux-navigator"] = {
+    loaded = true,
+    path = "/home/connor/.local/share/nvim/site/pack/packer/start/vim-tmux-navigator",
+    url = "https://github.com/christoomey/vim-tmux-navigator"
   },
   ["zen-mode.nvim"] = {
     loaded = true,
