@@ -53,7 +53,6 @@ return require('packer').startup(function(use)
             'nvim-tree/nvim-web-devicons', -- optional
         },
     }
-    use("m4xshen/hardtime.nvim")
     use {
         "smjonas/inc-rename.nvim",
         config = function()
