@@ -50,7 +50,7 @@ return require('packer').startup(function(use)
     use {
         'nvim-tree/nvim-tree.lua',
         requires = {
-            'nvim-tree/nvim-web-devicons', -- optional
+            'nvim-tree/nvim-web-devicons',  -- optional
         },
     }
     use {
@@ -61,4 +61,11 @@ return require('packer').startup(function(use)
     }
     use("ap/vim-css-color")
     use { "christoomey/vim-tmux-navigator", lazy = true }
+
+    use {
+        'numToStr/Comment.nvim',
+        config = function()
+            require('Comment').setup()
+        end
+    }
 end)
