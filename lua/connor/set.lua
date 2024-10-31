@@ -29,3 +29,8 @@ vim.opt.colorcolumn = "80"
 -- wrap long lines at word break
 vim.opt_global.linebreak = true;
 
+-- make .roc files have the correct filetype
+vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
+  pattern = { "*.roc" },
+  command = "set filetype=roc",
+})

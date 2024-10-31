@@ -95,6 +95,21 @@ return {
                     ['<C-Space>'] = cmp.mapping.complete(),
                 }),
             })
+
+            local lsp_configurations = require('lspconfig.configs')
+            if not lsp_configurations.roc then
+                lsp_configurations.roc = {
+                    default_config = {
+                        name = 'roc_language_server',
+                        cmd = { "roc_language_server" },
+                        filetypes = { "roc" },
+                        root_dir = require('lspconfig.util').find_git_ancestor,
+                        single_file_support = true
+                    }
+                }
+            end
+
+            require('lspconfig').roc.setup({})
         end
     },
     branch = 'v3.x',
