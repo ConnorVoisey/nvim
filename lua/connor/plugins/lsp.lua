@@ -65,6 +65,17 @@ return {
                 vim.keymap.set("n", "<leader>vrr", function() vim.lsp.buf.references() end, opts)
                 vim.keymap.set("n", "<leader>vrn", function() vim.lsp.buf.rename() end, opts)
                 vim.keymap.set("i", "<C-h>", function() vim.lsp.buf.signature_help() end, opts)
+                vim.keymap.set("n", "<leader>ve", function() vim.diagnostic.open_float() end, opts)
+                vim.diagnostic.config({
+                  signs = {
+                    text = {
+                      [vim.diagnostic.severity.ERROR] = '✘',
+                      [vim.diagnostic.severity.WARN] = '▲',
+                      [vim.diagnostic.severity.HINT] = '⚑',
+                      [vim.diagnostic.severity.INFO] = '»',
+                    },
+                  },
+                })
             end)
 
             require('mason').setup({})

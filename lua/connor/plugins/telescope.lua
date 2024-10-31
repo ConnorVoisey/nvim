@@ -53,7 +53,7 @@ return {
                 find_files = {
                     -- use find_files to show all files (including ignored and hidden files)
                     -- use git_files instead to show all tracked files (respects .gitignore, shows only tracked dotfiles)
-                    find_command = {"fdfind", "--type", "f", "--strip-cwd-prefix", "--hidden", "--no-ignore",
+                    find_command = {"fd", "--type", "f", "--strip-cwd-prefix", "--hidden", "--no-ignore",
                                     "--exclude", "**/.git/*"}
                 }
             }
