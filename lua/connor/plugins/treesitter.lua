@@ -1,4 +1,5 @@
 return {
+    "IndianBoy42/tree-sitter-just",
     {
         "nvim-treesitter/nvim-treesitter",
         build = ":TSUpdate",
@@ -24,6 +25,24 @@ return {
                     -- Instead of true it can also be a list of languages
                     additional_vim_regex_highlighting = false
                 }
+            }
+            local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
+            parser_config.just = {
+                install_info = {
+                    url = "https://github.com/IndianBoy42/tree-sitter-just", -- local path or git repo
+                    files = { "src/parser.c", "src/scanner.c" },
+                    branch = "main",
+                    -- use_makefile = true -- this may be necessary on MacOS (try if you see compiler errors)
+                },
+                maintainers = { "@IndianBoy42" },
+            }
+            parser_config.roc = {
+                install_info = {
+                    url = "~/.local/share/nvim/site/pack/tree-sitter-queries/start/tree-sitter-roc", -- local path or git repo
+                    files = { "src/parser.c", "src/scanner.c" },
+                    -- use_makefile = true -- this may be necessary on MacOS (try if you see compiler errors)
+                },
+                filetype = "roc",
             }
         end
     },
