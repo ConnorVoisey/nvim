@@ -26,6 +26,8 @@ vim.opt.updatetime = 50
 
 vim.opt.colorcolumn = "80"
 
+vim.opt.winborder = "rounded"
+
 -- wrap long lines at word break
 vim.opt_global.linebreak = true;
 

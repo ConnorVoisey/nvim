@@ -1,59 +1,75 @@
 return {
-    "IndianBoy42/tree-sitter-just",
     {
         "nvim-treesitter/nvim-treesitter",
+        branch = "main",
+        lazy = false,
         build = ":TSUpdate",
         config = function()
-            require 'nvim-treesitter.configs'.setup {
-                -- A list of parser names, or "all"
-                ensure_installed = { "vimdoc", "javascript", "typescript", "c", "lua", "rust", "svelte" },
+            local ts = require("nvim-treesitter")
+            local uv = vim.uv or vim.loop
 
-                -- Install parsers synchronously (only applied to `ensure_installed`)
-                sync_install = false,
+            -- Optional: defaults to stdpath("data").."/site" which is already
+            -- on runtimepath, so the installed parsers + queries take priority
+            -- over the (mismatched) system parsers in /usr/lib.
+            -- ts.setup {}
 
-                -- Automatically install missing parsers when entering buffer
-                -- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
-                auto_install = true,
-
-                highlight = {
-                    -- `false` will disable the whole extension
-                    enable = true,
-
-                    -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
-                    -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
-                    -- Using this option may slow down your editor, and you may see some duplicate highlights.
-                    -- Instead of true it can also be a list of languages
-                    additional_vim_regex_highlighting = false
-                }
-            }
-            local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
-            parser_config.blade = {
+            -- ── Register parsers that aren't in the built-in table ──────
+            -- New install_info shape: url + (branch|revision), `generate`
+            -- only when the repo ships grammar.js but no committed src/.
+            local parsers = require("nvim-treesitter.parsers")
+            parsers.blade = {
                 install_info = {
                     url = "https://github.com/EmranMR/tree-sitter-blade",
-                    files = { "src/parser.c" },
                     branch = "main",
+                    generate = true, -- repo has no committed parser.c
                 },
-                filetype = "blade"
             }
-            parser_config.just = {
+            parsers.just = {
                 install_info = {
-                    url = "https://github.com/IndianBoy42/tree-sitter-just", -- local path or git repo
-                    files = { "src/parser.c", "src/scanner.c" },
-                    branch = "main",
-                    -- use_makefile = true -- this may be necessary on MacOS (try if you see compiler errors)
+                    url = "https://github.com/IndianBoy42/tree-sitter-just",
+                    branch = "main", -- ships parser.c + scanner.c, no generate
                 },
                 maintainers = { "@IndianBoy42" },
             }
-            parser_config.roc = {
-                install_info = {
-                    url = "~/.local/share/nvim/site/pack/tree-sitter-queries/start/tree-sitter-roc", -- local path or git repo
-                    files = { "src/parser.c", "src/scanner.c" },
-                    -- use_makefile = true -- this may be necessary on MacOS (try if you see compiler errors)
-                },
-                filetype = "roc",
-            }
-        end
+
+            -- ── Filetype detection (used to live in install_info.filetype) ──
+            vim.filetype.add({
+                extension = { qbe = "qbe", lang = "lang" },
+            })
+
+            -- ── Fetch / keep maintained + GitHub parsers up to date ─────
+            ts.install({
+                "vimdoc", "javascript", "typescript", "c", "lua",
+                "rust", "svelte", "blade", "just",
+            })
+
+            -- ── Local parsers: install() only supports GitHub tarballs,
+            --    so compile pre-generated parser.c by hand into site/. ───
+            local function compile_local(lang, src)
+                local out_dir = vim.fn.stdpath("data") .. "/site/parser"
+                local out = out_dir .. "/" .. lang .. ".so"
+                if not uv.fs_stat(src .. "/src/parser.c") then return end
+                if uv.fs_stat(out) then return end -- delete the .so to rebuild
+                vim.fn.mkdir(out_dir, "p")
+                local cmd = { "cc", "-o", out, "-shared", "-Os", "-fPIC",
+                    "-I", src .. "/src", src .. "/src/parser.c" }
+                if uv.fs_stat(src .. "/src/scanner.c") then
+                    table.insert(cmd, src .. "/src/scanner.c")
+                end
+                vim.fn.system(cmd)
+            end
+            compile_local("qbe", "/home/connor/code/qbe/tree-sitter-qbe")
+            compile_local("lang", "/home/connor/code/tree-sitter/tree-sitter-lang")
+            -- roc: source dir missing; restore it then add a compile_local() call.
+
+            -- ── Highlighting is core's job now; enable per buffer ───────
+            vim.api.nvim_create_autocmd("FileType", {
+                callback = function()
+                    pcall(vim.treesitter.start)
+                end,
+            })
+        end,
     },
-    'nvim-treesitter/playground',
-    -- "nvim-treesitter/nvim-treesitter-context",
+    -- nvim-treesitter/playground is incompatible with the main branch.
+    -- Use the built-ins instead: :InspectTree and :EditQuery
 }

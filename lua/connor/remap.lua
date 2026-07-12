@@ -39,14 +39,14 @@ vim.keymap.set("n", "<leader>x", "<cmd>!chmod +x %<CR>", { silent = true })
 -- edit nvim config
 vim.keymap.set("n", "<leader>vpp", "<cmd>e ~/.config/nvim<CR>");
 
--- Reload nvim config and install packer deps
+-- Reload nvim config and sync plugins
 vim.keymap.set("n", "<leader>SO", function()
     vim.cmd("so")
-    vim.cmd("PackerSync")
+    vim.cmd("Lazy sync")
 end)
 
--- comment selection
-vim.keymap.set("v", "<leader>/", "<ESC><cmd>lua require('Comment.api').toggle.linewise(vim.fn.visualmode())<CR>");
+-- comment selection (native gc operator, built into Neovim since 0.10)
+vim.keymap.set("v", "<leader>/", "gc", { remap = true });
 
 -- toggle relative line numbers
 vim.keymap.set({"n", "v"}, "<leader>l", "<cmd>set rnu!<CR>");

@@ -1,6 +1,8 @@
 return {
     'nvim-telescope/telescope.nvim',
-    tag = '0.1.5',
+    -- 0.1.5 used the old nvim-treesitter API (parsers.ft_to_lang), which the
+    -- main-branch rewrite removed; v0.2.2 uses native vim.treesitter instead.
+    tag = 'v0.2.2',
     dependencies = {'nvim-lua/plenary.nvim'},
     config = function()
         local telescope = require('telescope')

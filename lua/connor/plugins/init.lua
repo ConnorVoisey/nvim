@@ -4,7 +4,6 @@ return {
         "folke/neoconf.nvim",
         cmd = "Neoconf"
     },
-    "folke/neodev.nvim",
     "folke/zen-mode.nvim",
     {
         "smjonas/inc-rename.nvim",
@@ -13,12 +12,6 @@ return {
         end,
     },
     "ap/vim-css-color",
-    {
-        'numToStr/Comment.nvim',
-        config = function()
-            require('Comment').setup()
-        end
-    },
     "nvim-lua/plenary.nvim",
     {
         'akinsho/flutter-tools.nvim',
