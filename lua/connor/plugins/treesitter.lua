@@ -62,10 +62,25 @@ return {
             compile_local("lang", "/home/connor/code/tree-sitter/tree-sitter-lang")
             -- roc: source dir missing; restore it then add a compile_local() call.
 
-            -- ── Highlighting is core's job now; enable per buffer ───────
+            -- ── Highlighting is core's job now; enable per buffer.
+            --    The main branch dropped auto_install, so download any
+            --    missing-but-available parser ourselves, then start. ───
             vim.api.nvim_create_autocmd("FileType", {
-                callback = function()
-                    pcall(vim.treesitter.start)
+                callback = function(ev)
+                    local lang = vim.treesitter.language.get_lang(ev.match) or ev.match
+                    if pcall(vim.treesitter.start, ev.buf, lang) then return end
+                    if not vim.tbl_contains(ts.get_available(), lang)
+                        or vim.tbl_contains(ts.get_installed(), lang) then
+                        return
+                    end
+                    ts.install(lang):await(function(err)
+                        if err then
+                            vim.notify("treesitter install failed for " .. lang .. ": " .. err,
+                                vim.log.levels.WARN)
+                        elseif vim.api.nvim_buf_is_valid(ev.buf) then
+                            vim.treesitter.start(ev.buf, lang)
+                        end
+                    end)
                 end,
             })
         end,
