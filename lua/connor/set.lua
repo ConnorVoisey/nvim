@@ -28,6 +28,9 @@ vim.opt.colorcolumn = "80"
 
 vim.opt.winborder = "rounded"
 
+-- load a project's .nvim.lua (asks once per file via :trust, re-asks if it changes)
+vim.opt.exrc = true
+
 -- wrap long lines at word break
 vim.opt_global.linebreak = true;
 

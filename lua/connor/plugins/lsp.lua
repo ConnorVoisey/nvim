@@ -86,16 +86,8 @@ return {
                 settings = { Lua = { diagnostics = { globals = { 'vim' } } } },
             })
 
-            -- rust_analyzer: use the rustup-managed binary, not Mason's
-            -- standalone build. Mason's was a different version than the
-            -- toolchain's cargo, so `cargo metadata` failed (--lockfile-path)
-            -- and dependency types showed "no information available".
-            -- `rustup run` keeps rust-analyzer + cargo on the same snapshot.
-            -- (Swap to '/usr/lib/rustup/bin/rust-analyzer' for a per-project,
-            --  rust-toolchain.toml-aware proxy on this machine.)
-            vim.lsp.config('rust_analyzer', {
-                cmd = { 'rustup', 'run', 'nightly', 'rust-analyzer' },
-            })
+            -- rust_analyzer is owned by rustaceanvim (see plugins/rustaceanvim.lua);
+            -- it's excluded from automatic_enable below so only one instance runs.
 
             -- roc: not packaged by mason/lspconfig — register + enable manually.
             -- root_markers replaces the deprecated lspconfig.util.find_git_ancestor.
@@ -110,6 +102,9 @@ return {
             -- auto-enables every installed server via vim.lsp.enable().
             require('mason-lspconfig').setup({
                 ensure_installed = { 'lua_ls' },
+                -- rustaceanvim starts rust-analyzer itself; enabling it here
+                -- too would run two servers fighting over the target/ lock.
+                automatic_enable = { exclude = { 'rust_analyzer' } },
             })
 
             -- Buffer-local keymaps on attach. Neovim 0.11+ already provides
